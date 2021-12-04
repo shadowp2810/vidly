@@ -1,9 +1,5 @@
 /*
-`
-npm i react-router-dom
-`
-First we wrap App with BrowserRouter
-
+We create a common Input component.
 */
 
 import React, { Component } from "react";
@@ -14,6 +10,7 @@ import Customers from "./component/customers";
 import Rentals from "./component/rentals";
 import NotFound from "./component/notFound";
 import NavBar from "./component/navBar";
+import LoginForm from "./component/loginForm";
 import "./App.css";
 
 class App extends Component {
@@ -23,6 +20,7 @@ class App extends Component {
         <NavBar />
         <main className="container">
           <Switch>
+            <Route path="/login" component={LoginForm}></Route>
             <Route path="/movies/:id" component={MovieForm}></Route>
             <Route path="/movies" component={Movies}></Route>
             <Route path="/customers" component={Customers}></Route>

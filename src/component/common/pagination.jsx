@@ -29,7 +29,7 @@ const Pagination = (props) => {
 };
 
 Pagination.propTypes = {
-  itemCount: PropTypes.number.isRequired,
+  itemsCount: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
