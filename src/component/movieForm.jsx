@@ -1,8 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import { getMovie, saveMovie } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
+import { getMovie, saveMovie } from "../services/movieService";
+import { getGenres } from "../services/genreService";
 
 class MovieForm extends Form {
   state = {
@@ -32,44 +32,27 @@ class MovieForm extends Form {
       .label("Daily Rental Rate"),
   };
 
-  componentDidMount() {
-    const genres = getGenres();
+  async componentDidMount() {
+    const { data: genres } = await getGenres();
     this.setState({ genres });
 
     //get id parameter from route
     const movieId = this.props.match.params.id;
     if (movieId === "new") return;
 
-    //if id is not new we get movie with given id
-    const movie = getMovie(movieId);
-    /*
-    if movie doesn't exist we redirect user to not-found
-    We dont use history.push because when user clicks back button 
-    they would return with an invalid movie id 
-    and again redirected to no-found page, 
-    so they will end up in infinite loop. 
-    The back button will never take them back to where they used to be. 
-    */
-    if (!movie) return this.props.history.replace("/not-found");
-
-    /*
-    We are setting the data property, 
-    but we are not setting that to the movie object we get from server.
-    This is a typical real world scenario,
-    because the restful apis we have on server are general purpose.
-    They are not built for specific page.
-    So data they return is used on several pages.
-    Each page needs a piece of that data.
-    Also what we want to display on page 
-    is a little bit different from structure of data.
-    */
-    this.setState({ data: this.mapToViewModel(movie) });
+    try {
+      const { data: movie } = await getMovie(movieId);
+      this.setState({ data: this.mapToViewModel(movie) });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        this.props.history.replace("/not-found");
+    }
   }
 
   mapToViewModel(movie) {
     return {
       _id: movie._id,
-      title: movie.titile,
+      title: movie.title,
       genreId: movie.genre._id,
       numberInStock: movie.numberInStock,
       dailyRentalRate: movie.dailyRentalRate,
