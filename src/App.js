@@ -1,6 +1,6 @@
 /*
-We replace fakeGenreService.js with genreService.js
-We make the changes in movies.jsx
+We extract endpoint URL into a config file 
+and modify movie and genre service accordingly
 */
 
 import React, { Component } from "react";
