@@ -1,7 +1,6 @@
 /*
-We add the http and log service js files we worked on in this section.
-We install `npm i axios@0.18.0 react-toastify@4.1.0`
-We log to console instead of to Raven in logService.
+We replace fakeGenreService.js with genreService.js
+We make the changes in movies.jsx
 */
 
 import React, { Component } from "react";
