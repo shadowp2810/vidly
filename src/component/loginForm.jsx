@@ -23,7 +23,11 @@ class LoginForm extends Form {
     try {
       const { data } = this.state;
       //returns a promise, which we await, and mark function as async
-      await login(data.username, data.password);
+      //we rename data to jwt as we already defined it.
+      const { data: jwt } = await login(data.username, data.password);
+      localStorage.setItem("token", jwt);
+      //redirect to homepage
+      this.props.history.push("/");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

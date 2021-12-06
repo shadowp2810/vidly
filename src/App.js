@@ -1,10 +1,18 @@
 /*
-We build a new service to talk to user endpoint,
-to create or delete users.
-We update registerFrom to include feature.
-We can test by registering new user on registerpage,
-and inspecting network tap on chrome for payload and response.
-We can also verify by looking at user collection on mongo database.
+When the user successfully logs in, they get a JSON Web Token.
+We should store this JWT on the client.
+Every browser has a small database called local storage.
+And in this database we can store key value pairs.
+So here when we await the promise we get from our login function,
+we get the response object, this response has a property called data,
+so we can use object destructering to pick the data property,
+but because we already defined data earlier, we rename it to jwt.
+With this we can get JWT in body of response.
+then localStorage.setItem("token", jwt);
+We open up chrome dev tooks and check under application tab,
+local storage per domain localhost:3001,
+and in this domain we have a database with key("token") value(JWT) pairs.
+Then we navigate user to homepage. this.props.history.push('/')
 */
 
 import React, { Component } from "react";
