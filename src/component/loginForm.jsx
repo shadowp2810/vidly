@@ -1,11 +1,11 @@
 /*
-Now we map the object we get from joi 
-and map it into our erros object.
+
 */
 
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
+import { login } from "../services/authService";
 
 class LoginForm extends Form {
   state = {
@@ -18,9 +18,20 @@ class LoginForm extends Form {
     password: Joi.string().required().label("Password"),
   };
 
-  doSubmit = () => {
-    //Call the Server
-    console.log("Submitted");
+  doSubmit = async () => {
+    //Call to Server
+    try {
+      const { data } = this.state;
+      //returns a promise, which we await, and mark function as async
+      await login(data.username, data.password);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        //ex.response.data is message given back by server
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
