@@ -1,6 +1,10 @@
 /*
-We extract endpoint URL into a config file 
-and modify movie and genre service accordingly
+We build a new service to talk to user endpoint,
+to create or delete users.
+We update registerFrom to include feature.
+We can test by registering new user on registerpage,
+and inspecting network tap on chrome for payload and response.
+We can also verify by looking at user collection on mongo database.
 */
 
 import React, { Component } from "react";

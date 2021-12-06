@@ -1,6 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
+//The import all functions, and functions we export from services/userService will be methods of object userService.
+import * as userService from "../services/userService";
 
 class RegisterForm extends Form {
   state = {
@@ -14,9 +16,19 @@ class RegisterForm extends Form {
     name: Joi.string().required().label("Name"),
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
     //Call to Server
-    console.log("Submitted");
+    try {
+      //This returns a promise, which we await and mark fuction as async.
+      await userService.register(this.state.data);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        //ex.response.data is message given back by server
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
