@@ -1,18 +1,26 @@
 /*
-When the user successfully logs in, they get a JSON Web Token.
-We should store this JWT on the client.
-Every browser has a small database called local storage.
-And in this database we can store key value pairs.
-So here when we await the promise we get from our login function,
-we get the response object, this response has a property called data,
-so we can use object destructering to pick the data property,
-but because we already defined data earlier, we rename it to jwt.
-With this we can get JWT in body of response.
-then localStorage.setItem("token", jwt);
-We open up chrome dev tooks and check under application tab,
-local storage per domain localhost:3001,
-and in this domain we have a database with key("token") value(JWT) pairs.
-Then we navigate user to homepage. this.props.history.push('/')
+Sending to request to registration endpoint on postman,
+returns 9 Headers key value pairs sent by server.
+X-Powered-By(Express), Access-Control-Allow-Origin(*),
+x-auth-token(eyJhbGciOiJIUzI1NiIsInR5cCI...),
+Content-Type(application/json; charset=utf-8),
+Content-Length(76), ETag(W/"4c-idlySe+LMzpTse9YL9TSk+Sm254"),
+Date(Mon, 06 Dec 2021 21:15:50 GMT), Connection(keep-alive),
+Keep-Alive(timeout=5).
+x-auth-token is a custom header. Headers that start with x are custom,
+and not part of standard http protocol. At the backend this was set as JWT,
+so with this when you register a user, you can read the http header,
+extract the JWT, store it in local storage, and redirect user.
+You might return this in body of response instead.
+In the vidly-api-node directory, under routes, we open users.js,
+we see router.post, which means went request is sent, this will be executed,
+under the line .header("x-auth-token", token) where we set custom header,
+if we want client to be able to read this header we need to set an additional header,
+which is a standard http header.
+We add line .header("access-control-expose-headers", "x-auth-token")
+This header lets webserver whitelist, that is header browser or server is allowed to access.
+Resubmitting the registration form and looking at response object 
+now shows the custom header which is the JWT which we can now read and store in local storage.
 */
 
 import React, { Component } from "react";
