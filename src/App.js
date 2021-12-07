@@ -1,17 +1,14 @@
 /*
-Protected API endpoints are the endpoints 
-that requre user to be authenticated or logged in,
-and potentially have certain permission.
-We go to vidly-api-node config directory 
-and in default.json we set requiresAuth to true.
-If you use library nodemom you don't you to restart node server everytime.
-Trying to edit or post a new movie now gives a 401 Unauthorized error.
-We go to httpService which is only place in application where we configure axios.
-We add another line of configuration that tells it 
-whenever it wants to make http request make sure to include this header,
-axios.defaults.headers.common["x-auth-token"] = auth.getJwt();
-So whenever we have http request this token will be included.
-If user is not logged in, token will be undefined and token will not be set.
+Http service has a dependency that to auth service,
+and Auth service has a dependency to Http service.
+This is called bi-directional dependencies,
+and that can cause problems later.
+First we need to determine which module is more essential or core module.
+In this case Http service is more essential as without it cannot make call to backend.
+So Auth module should be ontop of http module.
+So instead of Http serivice asking auth service for JWT (getJwt),
+we can go to auth service and tell http serice here is my JWT (setJwt),
+so we reverse the statement.
 */
 
 import React, { Component } from "react";
