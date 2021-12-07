@@ -1,16 +1,22 @@
 /*
-We don't want to repeat working with key item "token" in local storage everywhere.
-If tommorrow we decide to change the key to something else 
-there are multiple places in application that we need to modify.
-We should have only a single module with implementation of authentication.
-We should move the logic of storing the token in localstorage 
-or removing it inside authService.
+Protected API endpoints are the endpoints 
+that requre user to be authenticated or logged in,
+and potentially have certain permission.
+We go to vidly-api-node config directory 
+and in default.json we set requiresAuth to true.
+If you use library nodemom you don't you to restart node server everytime.
+Trying to edit or post a new movie now gives a 401 Unauthorized error.
+We go to httpService which is only place in application where we configure axios.
+We add another line of configuration that tells it 
+whenever it wants to make http request make sure to include this header,
+axios.defaults.headers.common["x-auth-token"] = auth.getJwt();
+So whenever we have http request this token will be included.
+If user is not logged in, token will be undefined and token will not be set.
 */
 
 import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-//import default function from module
 import Movies from "./component/movies";
 import MovieForm from "./component/movieForm";
 import Customers from "./component/customers";
