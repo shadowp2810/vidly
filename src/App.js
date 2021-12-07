@@ -1,12 +1,16 @@
 /*
-When user logs out thier token is deleted and entire app is reloaded.
+We don't want to repeat working with key item "token" in local storage everywhere.
+If tommorrow we decide to change the key to something else 
+there are multiple places in application that we need to modify.
+We should have only a single module with implementation of authentication.
+We should move the logic of storing the token in localstorage 
+or removing it inside authService.
 */
 
 import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 //import default function from module
-import jwtDecode from "jwt-decode";
 import Movies from "./component/movies";
 import MovieForm from "./component/movieForm";
 import Customers from "./component/customers";
@@ -16,6 +20,7 @@ import NavBar from "./component/navBar";
 import LoginForm from "./component/loginForm";
 import RegisterForm from "./component/registerForm";
 import Logout from "./component/logout";
+import auth from "./services/authService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -24,12 +29,8 @@ class App extends Component {
   state = {};
 
   componentDidMount() {
-    try {
-      const jwt = localStorage.getItem("token");
-      const user = jwtDecode(jwt);
-      //setting state will cause app component to rerender
-      this.setState({ user });
-    } catch (ex) {}
+    const user = auth.getCurrentUser();
+    this.setState({ user });
   }
 
   render() {

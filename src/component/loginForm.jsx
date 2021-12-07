@@ -5,7 +5,7 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import { login } from "../services/authService";
+import auth from "../services/authService";
 
 class LoginForm extends Form {
   state = {
@@ -23,9 +23,7 @@ class LoginForm extends Form {
     try {
       const { data } = this.state;
       //returns a promise, which we await, and mark function as async
-      //we rename data to jwt as we already defined it.
-      const { data: jwt } = await login(data.username, data.password);
-      localStorage.setItem("token", jwt);
+      await auth.login(data.username, data.password);
       //full reload of application so app component will mount again
       window.location = "/";
     } catch (ex) {
