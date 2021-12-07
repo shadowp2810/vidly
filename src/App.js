@@ -1,16 +1,5 @@
 /*
-Here in App Component it would be nice to have current user in state,
-and then when rendering current nav bar, passing the user as a prop.
-Can also pass the user to any other components in component tree.
-install `npm i jwt-decode@2.2.0`
-Passing an invalid code or null to decode function gives us an exception.
-So we wrap in try catch block.
-
-NavBar is a Functional component where we can either pass props or destructed property.
-Then with user property we conditionally render Login and Register or Username and Logout.
-But to show change requires refresh as componentdidmount only executes at start.
-So instead of redirecting to homepage from login and register forms, 
-we reload full application so it mounts again.
+When user logs out thier token is deleted and entire app is reloaded.
 */
 
 import React, { Component } from "react";
@@ -26,6 +15,7 @@ import NotFound from "./component/notFound";
 import NavBar from "./component/navBar";
 import LoginForm from "./component/loginForm";
 import RegisterForm from "./component/registerForm";
+import Logout from "./component/logout";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -51,6 +41,7 @@ class App extends Component {
           <Switch>
             <Route path="/register" component={RegisterForm}></Route>
             <Route path="/login" component={LoginForm}></Route>
+            <Route path="/logout" component={Logout}></Route>
             <Route path="/movies/:id" component={MovieForm}></Route>
             <Route path="/movies" component={Movies}></Route>
             <Route path="/customers" component={Customers}></Route>
