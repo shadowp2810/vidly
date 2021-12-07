@@ -1,14 +1,36 @@
 /*
-Http service has a dependency that to auth service,
-and Auth service has a dependency to Http service.
-This is called bi-directional dependencies,
-and that can cause problems later.
-First we need to determine which module is more essential or core module.
-In this case Http service is more essential as without it cannot make call to backend.
-So Auth module should be ontop of http module.
-So instead of Http serivice asking auth service for JWT (getJwt),
-we can go to auth service and tell http serice here is my JWT (setJwt),
-so we reverse the statement.
+Currently we are unable to delete movies,
+and fails with error 403 Forbidden,
+because the backend is implemented such that only admins can delete a movie.
+In vidly-node-api, inside routes folder, movies module,
+on line 67 we are setting up a route handler,
+which is telling express, the frameword used to build the application,
+that if you get a delete request to movies endpoint, make sure client is autenticated,
+and is an admin. So auth and admin are two functions. 
+These are refered to a middlewear functions.
+In the middlewear folder, auth.js, we see auth is a function,
+which checks config to see if authentication is enabled or not,
+and if its disabled it simple passes to next middlewear function,
+otherwise reads the header from request,
+and if you don't have token returns response with 401 Unathorizes, custom message Access Denied.
+If you do have a token it tries to validate it 
+and it it's valid it passes control to next middlewear function,
+otherwise returns status with 400, custom message Invalid Token.
+This was the auth middlewear function, now we look at admin middlewear function.
+At beginning of functions checks if authentication is diabled and passes to next middlewear function.
+Otherwise checks to see if current user is admin, 
+and if is falsy sends status 403, custom message Access Denied.
+Which is exactly what we get here. 
+So in this case client sent a valid jwt, but was not an admin,
+so server didn't allow operation.
+To fix this issue, we need to go to database and set this property to true.
+We can go to compass and add new property isAdmin: true, as a boolen.
+Since the token currently being used was from before, we need to relogin and get new token.
+Decoding the token shows us this user is an admin, which means we should be able to delete movie.
+Here we manually make a user an admin, 
+but in production we need a complete user interface for managing users and permission,
+which is not covered in course. Generally speaking, first time you deploy application,
+should have atleast one admin user. Can be done manually or maybe through a script. 
 */
 
 import React, { Component } from "react";
