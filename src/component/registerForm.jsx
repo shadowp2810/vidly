@@ -22,7 +22,8 @@ class RegisterForm extends Form {
       //This returns a promise, which we await and mark fuction as async.
       const response = await userService.register(this.state.data);
       localStorage.setItem("token", response.headers["x-auth-token"]);
-      this.props.history.push("/");
+      //full reload of application so app component will mount again
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

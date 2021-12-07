@@ -26,8 +26,8 @@ class LoginForm extends Form {
       //we rename data to jwt as we already defined it.
       const { data: jwt } = await login(data.username, data.password);
       localStorage.setItem("token", jwt);
-      //redirect to homepage
-      this.props.history.push("/");
+      //full reload of application so app component will mount again
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

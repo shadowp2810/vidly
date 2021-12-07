@@ -1,31 +1,23 @@
 /*
-Sending to request to registration endpoint on postman,
-returns 9 Headers key value pairs sent by server.
-X-Powered-By(Express), Access-Control-Allow-Origin(*),
-x-auth-token(eyJhbGciOiJIUzI1NiIsInR5cCI...),
-Content-Type(application/json; charset=utf-8),
-Content-Length(76), ETag(W/"4c-idlySe+LMzpTse9YL9TSk+Sm254"),
-Date(Mon, 06 Dec 2021 21:15:50 GMT), Connection(keep-alive),
-Keep-Alive(timeout=5).
-x-auth-token is a custom header. Headers that start with x are custom,
-and not part of standard http protocol. At the backend this was set as JWT,
-so with this when you register a user, you can read the http header,
-extract the JWT, store it in local storage, and redirect user.
-You might return this in body of response instead.
-In the vidly-api-node directory, under routes, we open users.js,
-we see router.post, which means went request is sent, this will be executed,
-under the line .header("x-auth-token", token) where we set custom header,
-if we want client to be able to read this header we need to set an additional header,
-which is a standard http header.
-We add line .header("access-control-expose-headers", "x-auth-token")
-This header lets webserver whitelist, that is header browser or server is allowed to access.
-Resubmitting the registration form and looking at response object 
-now shows the custom header which is the JWT which we can now read and store in local storage.
+Here in App Component it would be nice to have current user in state,
+and then when rendering current nav bar, passing the user as a prop.
+Can also pass the user to any other components in component tree.
+install `npm i jwt-decode@2.2.0`
+Passing an invalid code or null to decode function gives us an exception.
+So we wrap in try catch block.
+
+NavBar is a Functional component where we can either pass props or destructed property.
+Then with user property we conditionally render Login and Register or Username and Logout.
+But to show change requires refresh as componentdidmount only executes at start.
+So instead of redirecting to homepage from login and register forms, 
+we reload full application so it mounts again.
 */
 
 import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+//import default function from module
+import jwtDecode from "jwt-decode";
 import Movies from "./component/movies";
 import MovieForm from "./component/movieForm";
 import Customers from "./component/customers";
@@ -38,11 +30,23 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
+  //initialize state to empty object
+  state = {};
+
+  componentDidMount() {
+    try {
+      const jwt = localStorage.getItem("token");
+      const user = jwtDecode(jwt);
+      //setting state will cause app component to rerender
+      this.setState({ user });
+    } catch (ex) {}
+  }
+
   render() {
     return (
       <React.Fragment>
         <ToastContainer />
-        <NavBar />
+        <NavBar user={this.state.user} />
         <main className="container">
           <Switch>
             <Route path="/register" component={RegisterForm}></Route>
