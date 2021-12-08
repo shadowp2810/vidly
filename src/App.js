@@ -1,15 +1,9 @@
 /*
-Users who are not logged in can still access Movie Form at
-http://localhost:3000/movies/new
-even though button is hidden.
-We must protect this route.
-instead of component= we use render= as we can pass a function.
-And in that function we can check to see if current user is null 
-in which case we redirect user.
-We destructure define and destrucute const { user } = this.state; in render.
-If not user then we redirect to login, otherwise we route to movie form. 
-Later we will look at how to redirect user back to screen they were in before they logged in.
-Next we will look at reusable route component. 
+When we use a Route we supply a path and a component or render atribute.
+We create a new component called ProtectedRoute, which has the same interface as Routes,
+and takes same atributes, but ProtectedRoute is aware of the current user.
+So if user is not logged in they are automatically redirected to login page.
+So logic doesn't need to be repeated for each Route that needs to be protected.
 */
 
 import React, { Component } from "react";
@@ -25,6 +19,7 @@ import LoginForm from "./component/loginForm";
 import RegisterForm from "./component/registerForm";
 import Logout from "./component/logout";
 import auth from "./services/authService";
+import ProtectedRoute from "./component/common/protectedRoute";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -43,22 +38,16 @@ class App extends Component {
     return (
       <React.Fragment>
         <ToastContainer />
-        <NavBar user={this.state.user} />
+        <NavBar user={user} />
         <main className="container">
           <Switch>
             <Route path="/register" component={RegisterForm}></Route>
             <Route path="/login" component={LoginForm}></Route>
             <Route path="/logout" component={Logout}></Route>
-            <Route
-              path="/movies/:id"
-              render={(props) => {
-                if (!user) return <Redirect to="/login" />;
-                return <MovieForm {...props} />;
-              }}
-            ></Route>
+            <ProtectedRoute path="/movies/:id" component={MovieForm} />
             <Route
               path="/movies"
-              render={(props) => <Movies {...props} user={this.state.user} />}
+              render={(props) => <Movies {...props} user={user} />}
             ></Route>
             <Route path="/customers" component={Customers}></Route>
             <Route path="/rentals" component={Rentals}></Route>
