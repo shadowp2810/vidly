@@ -1,9 +1,19 @@
 /*
-When we use a Route we supply a path and a component or render atribute.
-We create a new component called ProtectedRoute, which has the same interface as Routes,
-and takes same atributes, but ProtectedRoute is aware of the current user.
-So if user is not logged in they are automatically redirected to login page.
-So logic doesn't need to be repeated for each Route that needs to be protected.
+When user currently logs in they are redirected 
+to movies pages and not previous location.
+So we pass additional data to Protected Route component.
+console.log(props) in the component shows us under location the state is undefined.
+Documentation shows Redirect can be to a string or object.
+object is a location object, with properties pathname, search, and state.
+And using state we can pass any additional data to component we are redirecting user to.
+<Redirect to={{
+    pathname: "./login",
+    state: { from: props.location },
+  }}
+/>
+where location object represents location before login screen.
+Now we go to login form component and see if state was set.
+We also want to redirect signed in user to homepage if they go to /login.
 */
 
 import React, { Component } from "react";
@@ -29,6 +39,7 @@ class App extends Component {
 
   componentDidMount() {
     const user = auth.getCurrentUser();
+    //setting state will cause app component to rerender
     this.setState({ user });
   }
 

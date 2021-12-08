@@ -3,6 +3,7 @@
 */
 
 import React from "react";
+import { Redirect } from "react-router-dom";
 import Joi from "joi-browser";
 import Form from "./common/form";
 import auth from "../services/authService";
@@ -24,8 +25,10 @@ class LoginForm extends Form {
       const { data } = this.state;
       //returns a promise, which we await, and mark function as async
       await auth.login(data.username, data.password);
+      //set state to location object of previous page.
+      const { state } = this.props.location;
       //full reload of application so app component will mount again
-      window.location = "/";
+      window.location = state ? state.from.pathname : "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
@@ -37,6 +40,13 @@ class LoginForm extends Form {
   };
 
   render() {
+    /*
+    Redirect to homepage if already logged in, incase user goes to /login
+    We don't use window.location here because we use that 
+    only when user is trying to log in and we remount application to be in right state.
+    */
+    if (auth.getCurrentUser()) return <Redirect to="/" />;
+
     return (
       <div>
         <h1>Login</h1>
