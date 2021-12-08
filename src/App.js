@@ -1,9 +1,15 @@
 /*
-Showing or Hiding elements based on users authentication or authorization type.
-  <Route
-    path="/movies"
-    render={(props) => <Movies {...props} user={this.state.user} />}
-  ></Route>
+Users who are not logged in can still access Movie Form at
+http://localhost:3000/movies/new
+even though button is hidden.
+We must protect this route.
+instead of component= we use render= as we can pass a function.
+And in that function we can check to see if current user is null 
+in which case we redirect user.
+We destructure define and destrucute const { user } = this.state; in render.
+If not user then we redirect to login, otherwise we route to movie form. 
+Later we will look at how to redirect user back to screen they were in before they logged in.
+Next we will look at reusable route component. 
 */
 
 import React, { Component } from "react";
@@ -32,6 +38,8 @@ class App extends Component {
   }
 
   render() {
+    const { user } = this.state;
+
     return (
       <React.Fragment>
         <ToastContainer />
@@ -41,7 +49,13 @@ class App extends Component {
             <Route path="/register" component={RegisterForm}></Route>
             <Route path="/login" component={LoginForm}></Route>
             <Route path="/logout" component={Logout}></Route>
-            <Route path="/movies/:id" component={MovieForm}></Route>
+            <Route
+              path="/movies/:id"
+              render={(props) => {
+                if (!user) return <Redirect to="/login" />;
+                return <MovieForm {...props} />;
+              }}
+            ></Route>
             <Route
               path="/movies"
               render={(props) => <Movies {...props} user={this.state.user} />}
