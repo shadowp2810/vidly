@@ -6,9 +6,8 @@ we are just leaving as is incase we want to later.
 //import default function from module
 import jwtDecode from "jwt-decode";
 import http from "./httpService";
-import { apiUrl } from "../config.json";
 
-const apiEndpoint = apiUrl + "/auth";
+const apiEndpoint = "/auth";
 const tokenKey = "token";
 
 http.setJwt(getJwt());
