@@ -1,7 +1,21 @@
-# Getting Started with Create React App
+# Vidly Video Rental - React Web App
+Currently hosted freely on Heroku so server sleeps when not in use, <br>
+and takes a minute to wake up. https://powerful-eyrie-96614.herokuapp.com/ <br>
+Project made as part of CodeWithMosh **React** course. <br>
+The backend is Node. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Create and update forms, pagination, table sorting, routing, search, authentication, JSON web token, 
+protected routes, toasted notifications, conditional routing and rendering of elements by authorization, async and await.
 
+### User Perspective
+![vidly](demo/UserView.png)
+
+### Admin Perspective
+![vidly](demo/AdminView.png)
+<br><br>
+
+---
+### React guides:
 ## Available Scripts
 
 In the project directory, you can run:
