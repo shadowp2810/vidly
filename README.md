@@ -1,8 +1,8 @@
 # Vidly Video Rental - React Web App
-Currently hosted freely on Heroku so server sleeps when not in use, <br>
-and takes a minute to wake up. https://powerful-eyrie-96614.herokuapp.com/ <br>
+Currently hosted freely on Heroku so server sleeps when not in use, 
+and takes a minute to wake up. <br> https://powerful-eyrie-96614.herokuapp.com/ <br>
 Project made as part of CodeWithMosh **React** course. <br>
-The backend is Node. 
+The backend is **Node** Express MongoDB. You can view backend code here: <br> https://github.com/shadowp2810/vidrent-api-node <br>
 
 Create and update forms, pagination, table sorting, routing, search, authentication, JSON web token, 
 protected routes, toasted notifications, conditional routing and rendering of elements by authorization, async and await.
